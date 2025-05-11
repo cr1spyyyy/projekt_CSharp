@@ -1,16 +1,21 @@
+using System;
+using Microsoft.Extensions.DependencyInjection;
+
 namespace projekt_CSharp
 {
     public partial class MenuForm : Form
     {
-        public MenuForm()
+        private readonly IServiceProvider _serviceProvider;
+        public MenuForm(IServiceProvider serviceProvider)
         {
             InitializeComponent();
+            _serviceProvider = serviceProvider;
         }
 
         private void kursyBtn_Click(object sender, EventArgs e)
         {
-            KursyForm kursyForm = new KursyForm();
-            kursyForm.ShowDialog(); 
+            var kursyForm = _serviceProvider.GetRequiredService<KursyForm>();
+            kursyForm.Show();
         }
         private void uczestnicyBtn_Click(object sender, EventArgs e)
         {
