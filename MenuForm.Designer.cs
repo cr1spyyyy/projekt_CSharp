@@ -96,6 +96,7 @@
             rejestracjaBtn.TabIndex = 2;
             rejestracjaBtn.Text = "Zarejestruj";
             rejestracjaBtn.UseVisualStyleBackColor = true;
+            rejestracjaBtn.Click += rejestracjaBtn_Click;
             // 
             // uczestnicyBtn
             // 

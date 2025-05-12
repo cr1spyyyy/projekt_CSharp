@@ -19,11 +19,18 @@ namespace projekt_CSharp
         }
         private void uczestnicyBtn_Click(object sender, EventArgs e)
         {
-            
+            var uczestnicyForm = _serviceProvider.GetRequiredService<UczestnicyForm>();
+            uczestnicyForm.Show();
         }
         private void wyjdzBtn_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void rejestracjaBtn_Click(object sender, EventArgs e)
+        {
+            var rejestracjaForm = _serviceProvider.GetRequiredService<RejestracjaForm>();
+            rejestracjaForm.Show();
         }
     }
 }

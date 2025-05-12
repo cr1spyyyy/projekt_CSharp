@@ -73,6 +73,7 @@
             szukajBtn.TabIndex = 3;
             szukajBtn.Text = "Wyszukaj";
             szukajBtn.UseVisualStyleBackColor = true;
+            szukajBtn.Click += szukajBtn_Click;
             // 
             // txtSzukajKursu
             // 
@@ -80,6 +81,7 @@
             txtSzukajKursu.Name = "txtSzukajKursu";
             txtSzukajKursu.Size = new Size(343, 23);
             txtSzukajKursu.TabIndex = 2;
+            txtSzukajKursu.TextChanged += txtSzukajKursu_TextChanged;
             // 
             // label1
             // 
@@ -101,6 +103,7 @@
             dodajBtn.TabIndex = 0;
             dodajBtn.Text = "Dodaj nowy kurs";
             dodajBtn.UseVisualStyleBackColor = true;
+            dodajBtn.Click += dodajBtn_Click;
             // 
             // dgvKursy
             // 

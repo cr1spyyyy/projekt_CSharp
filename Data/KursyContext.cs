@@ -36,10 +36,10 @@ namespace projekt_CSharp.Data
             });
 
 
-            // Konfiguracja dla tabeli Zapisy (tabela łącząca)
+            // Konfiguracja dla tabeli Zapisy
             modelBuilder.Entity<Zapis>(entity =>
             {
-                // Klucz złożony (unikalność pary KursId, UczestnikId)
+                // Klucz złożony 
                 entity.HasIndex(z => new { z.KursId, z.UczestnikId }).IsUnique();
 
 

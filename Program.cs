@@ -31,11 +31,14 @@ namespace projekt_CSharp
                         options.UseNpgsql(connectionString));
 
                     services.AddTransient<KursyForm>();
-
+                    services.AddTransient<EdytujKursForm>();
+                    services.AddTransient<UczestnicyForm>();
+                    services.AddTransient<EdytujUczForm>();
+                    services.AddTransient<RejestracjaForm>();
                 })
                 .Build();
 
-            ServiceProvider = host.Services; // Udostêpnienie ServiceProvider globalnie (opcjonalne, ale czasem przydatne w WinForms)
+            ServiceProvider = host.Services; 
 
 
             Application.Run(new MenuForm(ServiceProvider));
