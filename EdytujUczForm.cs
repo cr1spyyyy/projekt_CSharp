@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using projekt_CSharp.Data;
 using projekt_CSharp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace projekt_CSharp
 {
@@ -74,7 +75,7 @@ namespace projekt_CSharp
             UczestnikDoEdycji.NumerTelefonu = txtNumerTelefonu.Text.Trim();
             if (string.IsNullOrWhiteSpace(UczestnikDoEdycji.NumerTelefonu)) UczestnikDoEdycji.NumerTelefonu = null;
 
-            UczestnikDoEdycji.DataUrodzenia = dtpDataUrodzenia.Checked ? (DateTime?)dtpDataUrodzenia.Value.Date : null;
+            UczestnikDoEdycji.DataUrodzenia = dtpDataUrodzenia.Checked ? (DateTime?)dtpDataUrodzenia.Value.ToUniversalTime() : null;
 
             var validationContext = new ValidationContext(UczestnikDoEdycji, null, null);
             var validationResults = new List<ValidationResult>();
@@ -110,10 +111,6 @@ namespace projekt_CSharp
                 if (_isNewUczestnik)
                 {
                     _context.Uczestnicy.Add(UczestnikDoEdycji);
-                }
-                else
-                {
-                    _context.Uczestnicy.Update(UczestnikDoEdycji);
                 }
                 _context.SaveChanges();
                 this.DialogResult = DialogResult.OK;

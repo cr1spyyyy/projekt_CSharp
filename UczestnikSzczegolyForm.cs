@@ -10,16 +10,11 @@ using System.Windows.Forms;
 
 namespace projekt_CSharp
 {
-    public partial class KursSzczegolyForm : Form
+    public partial class UczestnikSzczegolyForm : Form
     {
-        public KursSzczegolyForm()
+        public UczestnikSzczegolyForm()
         {
             InitializeComponent();
-        }
-
-        private void gbInformacjeOKursie_Enter(object sender, EventArgs e)
-        {
-
         }
     }
 }

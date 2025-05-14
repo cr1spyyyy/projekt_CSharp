@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Microsoft.EntityFrameworkCore;
 using projekt_CSharp.Data;
 using projekt_CSharp.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace projekt_CSharp
 {
@@ -39,6 +40,7 @@ namespace projekt_CSharp
         {
             try
             {
+                _context.ChangeTracker.Clear();
                 IQueryable<Uczestnik> query = _context.Uczestnicy.Include(u => u.Zapisy);
 
                 if (!string.IsNullOrWhiteSpace(searchTerm))
@@ -103,10 +105,15 @@ namespace projekt_CSharp
 
         private void btnDodajUczestnika_Click(object sender, EventArgs e)
         {
-            var edytujUczForm = new EdytujUczForm(_context, null); // null dla nowego uczestnika
-            if (edytujUczForm.ShowDialog() == DialogResult.OK)
+            using (var addScope = Program.ServiceProvider.CreateScope())
             {
-                LoadUczestnicy();
+                var addContext = addScope.ServiceProvider.GetRequiredService<KursyContext>();
+
+                var edytujUczForm = new EdytujUczForm(addContext, null);
+                if (edytujUczForm.ShowDialog() == DialogResult.OK)
+                {
+                    LoadUczestnicy(txtSzukajUczestnika.Text);
+                }
             }
         }
 
@@ -114,51 +121,77 @@ namespace projekt_CSharp
         {
             if (e.RowIndex < 0) return;
 
-            Uczestnik wybranyUczestnik = dvgUczestnicy.Rows[e.RowIndex].DataBoundItem as Uczestnik;
-            if (wybranyUczestnik == null) return;
+            bool isEditClick = dvgUczestnicy.Columns[e.ColumnIndex].Name == "EditColumn";
+            bool isDeleteClick = dvgUczestnicy.Columns[e.ColumnIndex].Name == "DeleteColumn";
 
-            int uczestnikId = wybranyUczestnik.Id;
+            if (!isEditClick && !isDeleteClick) return;
 
-            if (dvgUczestnicy.Columns[e.ColumnIndex].Name == "EditColumn")
+            if (!(dvgUczestnicy.Rows[e.RowIndex].Cells["IdColumn"].Value is int uczestnikId))
             {
-                var uczestnikDoEdycjiZBazy = _context.Uczestnicy.AsNoTracking().FirstOrDefault(u => u.Id == uczestnikId);
-                if (uczestnikDoEdycjiZBazy == null)
-                {
-                    MessageBox.Show("Nie znaleziono uczestnika do edycji.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+                MessageBox.Show("Nie można odczytać ID uczestnika.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-                var edytujUczForm = new EdytujUczForm(_context, uczestnikDoEdycjiZBazy);
-                if (edytujUczForm.ShowDialog() == DialogResult.OK)
+
+            if (isEditClick) 
+            {
+                using (var editScope = Program.ServiceProvider.CreateScope())
                 {
-                    LoadUczestnicy();
+                    var editContext = editScope.ServiceProvider.GetRequiredService<KursyContext>();
+                    var uczestnikDoEdycjiZBazy = editContext.Uczestnicy.FirstOrDefault(u => u.Id == uczestnikId);
+
+                    if (uczestnikDoEdycjiZBazy == null)
+                    {
+                        MessageBox.Show("Nie znaleziono uczestnika do edycji w bazie danych. Mógł zostać usunięty.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        LoadUczestnicy(txtSzukajUczestnika.Text);
+                        return;
+                    }
+                    var edytujUczForm = new EdytujUczForm(editContext, uczestnikDoEdycjiZBazy);
+                    if (edytujUczForm.ShowDialog() == DialogResult.OK)
+                    {
+                        LoadUczestnicy(txtSzukajUczestnika.Text);
+                    }
                 }
             }
-            else if (dvgUczestnicy.Columns[e.ColumnIndex].Name == "DeleteColumn")
+            else if (isDeleteClick) 
             {
-                if (MessageBox.Show($"Czy na pewno chcesz usunąć uczestnika: '{wybranyUczestnik.PelneImie}'?", "Potwierdzenie Usunięcia", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                {
-                    try
-                    {
-                        bool czySaZapisy = _context.Zapisy.Any(z => z.UczestnikId == uczestnikId);
-                        if (czySaZapisy)
-                        {
-                            MessageBox.Show("Nie można usunąć uczestnika, ponieważ jest zapisany na kurs(y). Najpierw usuń powiązane zapisy.", "Błąd Usuwania", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
+                string pelneImie = $"{dvgUczestnicy.Rows[e.RowIndex].Cells["ImieColumn"].Value} {dvgUczestnicy.Rows[e.RowIndex].Cells["NazwiskoColumn"].Value}";
 
-                        var uczestnikDoUsuniecia = _context.Uczestnicy.Find(uczestnikId);
-                        if (uczestnikDoUsuniecia != null)
-                        {
-                            _context.Uczestnicy.Remove(uczestnikDoUsuniecia);
-                            _context.SaveChanges();
-                            LoadUczestnicy();
-                            MessageBox.Show("Uczestnik został pomyślnie usunięty.", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                    }
-                    catch (Exception ex)
+                if (MessageBox.Show($"Czy na pewno chcesz usunąć uczestnika: '{pelneImie}'?", "Potwierdzenie Usunięcia", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                {
+                    using (var deleteScope = Program.ServiceProvider.CreateScope())
                     {
-                        MessageBox.Show($"Błąd podczas usuwania uczestnika: {ex.Message}", "Błąd Usuwania", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        var deleteContext = deleteScope.ServiceProvider.GetRequiredService<KursyContext>();
+                        try
+                        {
+                            bool czySaZapisy = deleteContext.Zapisy.Any(z => z.UczestnikId == uczestnikId);
+                            if (czySaZapisy)
+                            {
+                                MessageBox.Show("Nie można usunąć uczestnika, ponieważ jest zapisany na kurs(y). Najpierw usuń powiązane zapisy.", "Błąd Usuwania", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                return;
+                            }
+                            var uczestnikDoUsuniecia = deleteContext.Uczestnicy.Find(uczestnikId);
+                            if (uczestnikDoUsuniecia != null)
+                            {
+                                deleteContext.Uczestnicy.Remove(uczestnikDoUsuniecia);
+                                deleteContext.SaveChanges();
+                                LoadUczestnicy(txtSzukajUczestnika.Text);
+                                MessageBox.Show("Uczestnik został pomyślnie usunięty.", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Nie znaleziono uczestnika do usunięcia. Mógł zostać już usunięty.", "Błąd Usuwania", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                LoadUczestnicy(txtSzukajUczestnika.Text);
+                            }
+                        }
+                        catch (DbUpdateException dbEx)
+                        {
+                            MessageBox.Show($"Błąd podczas usuwania uczestnika (baza danych): {dbEx.InnerException?.Message ?? dbEx.Message}", "Błąd Usuwania", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Błąd podczas usuwania uczestnika: {ex.Message}", "Błąd Usuwania", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
                     }
                 }
             }

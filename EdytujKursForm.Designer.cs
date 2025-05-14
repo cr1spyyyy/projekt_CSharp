@@ -99,7 +99,7 @@
             dtpDataRozpoczecia.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 238);
             dtpDataRozpoczecia.Location = new Point(152, 113);
             dtpDataRozpoczecia.MaxDate = new DateTime(2030, 12, 31, 0, 0, 0, 0);
-            dtpDataRozpoczecia.MinDate = new DateTime(2025, 5, 25, 23, 59, 59, 0);
+            dtpDataRozpoczecia.MinDate = new DateTime(2025, 5, 14, 0, 0, 0, 0);
             dtpDataRozpoczecia.Name = "dtpDataRozpoczecia";
             dtpDataRozpoczecia.Size = new Size(285, 29);
             dtpDataRozpoczecia.TabIndex = 5;
@@ -122,7 +122,7 @@
             dtpDataZakonczenia.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 238);
             dtpDataZakonczenia.Location = new Point(152, 164);
             dtpDataZakonczenia.MaxDate = new DateTime(2040, 12, 31, 0, 0, 0, 0);
-            dtpDataZakonczenia.MinDate = new DateTime(2025, 5, 12, 0, 0, 0, 0);
+            dtpDataZakonczenia.MinDate = new DateTime(2025, 5, 14, 0, 0, 0, 0);
             dtpDataZakonczenia.Name = "dtpDataZakonczenia";
             dtpDataZakonczenia.Size = new Size(285, 29);
             dtpDataZakonczenia.TabIndex = 7;
@@ -188,6 +188,7 @@
             // btnZapiszKurs
             // 
             btnZapiszKurs.AutoSize = true;
+            btnZapiszKurs.DialogResult = DialogResult.OK;
             btnZapiszKurs.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
             btnZapiszKurs.Location = new Point(152, 403);
             btnZapiszKurs.Name = "btnZapiszKurs";
@@ -200,6 +201,7 @@
             // btnAnuluj
             // 
             btnAnuluj.AutoSize = true;
+            btnAnuluj.DialogResult = DialogResult.Cancel;
             btnAnuluj.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
             btnAnuluj.Location = new Point(488, 403);
             btnAnuluj.Name = "btnAnuluj";

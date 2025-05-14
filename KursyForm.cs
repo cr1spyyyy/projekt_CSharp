@@ -28,6 +28,7 @@ namespace projekt_CSharp
         {
             try
             {
+                _context.ChangeTracker.Clear();
                 IQueryable<Kurs> query = _context.Kursy
                                                  .Include(k => k.Zapisy);
 
@@ -148,17 +149,22 @@ namespace projekt_CSharp
 
             if (dgvKursy.Columns[e.ColumnIndex].Name == "EditColumn")
             {
-                var kursDoEdycjiZBazy = _context.Kursy.AsNoTracking().FirstOrDefault(k => k.Id == kursId);
-                if (kursDoEdycjiZBazy == null)
+                using (var editScope = Program.ServiceProvider.CreateScope())
                 {
-                    MessageBox.Show("Nie znaleziono kursu do edycji.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+                    var editContext = editScope.ServiceProvider.GetRequiredService<KursyContext>();
+                    var kursDoEdycjiZBazy = editContext.Kursy.FirstOrDefault(k => k.Id == kursId);
 
-                var edytujKursForm = new EdytujKursForm(_context, kursDoEdycjiZBazy);
-                if (edytujKursForm.ShowDialog() == DialogResult.OK)
-                {
-                    LoadKursy();
+                    if (kursDoEdycjiZBazy == null)
+                    {
+                        MessageBox.Show("Nie znaleziono kursu do edycji.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    var edytujKursForm = new EdytujKursForm(editContext, kursDoEdycjiZBazy);
+                    if (edytujKursForm.ShowDialog() == DialogResult.OK)
+                    {
+                        LoadKursy(txtSzukajKursu.Text); 
+                    }
                 }
             }
             else if (dgvKursy.Columns[e.ColumnIndex].Name == "DeleteColumn")
@@ -184,12 +190,14 @@ namespace projekt_CSharp
 
         private void dodajBtn_Click(object sender, EventArgs e)
         {
-            using (var form = Program.ServiceProvider.GetRequiredService<EdytujKursForm>())
+            using (var addScope = Program.ServiceProvider.CreateScope())
             {
-                var edytujKursForm = new EdytujKursForm(_context, null);
-                if (form.ShowDialog() == DialogResult.OK)
+                var addContext = addScope.ServiceProvider.GetRequiredService<KursyContext>();
+                var edytujKursForm = new EdytujKursForm(addContext, null);
+                if (edytujKursForm.ShowDialog() == DialogResult.OK)
                 {
-                    LoadKursy();
+                    
+                    LoadKursy(txtSzukajKursu.Text); 
                 }
             }
         }

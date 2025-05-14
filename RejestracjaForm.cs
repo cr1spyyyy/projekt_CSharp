@@ -27,11 +27,11 @@ namespace projekt_CSharp
             try
             {
                 WypelnijComboBoxy();
-                dtpDataZapisu.Value = DateTime.Now; 
+                dtpDataZapisu.Value = DateTime.Now;
                 cmbStatusPlatnosci.Items.AddRange(new string[] { "Nieopłacony", "Zaliczka", "Opłacony" });
                 cmbStatusPlatnosci.SelectedIndex = 0;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Błąd podczas ładowania danych formularza rejestracji: {ex.Message}\n{ex.InnerException?.Message}", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -93,13 +93,24 @@ namespace projekt_CSharp
                 _context.Zapisy.Add(nowyZapis);
                 _context.SaveChanges();
                 MessageBox.Show("Uczestnik został pomyślnie zapisany na kurs.", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.DialogResult = DialogResult.OK; 
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Błąd podczas tworzenia zapisu: {ex.Message}\n{ex.InnerException?.Message}", "Błąd Zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void cmbKursy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void btnAnulujZapis_Click(object sender, EventArgs e)
+        {
+            Close();
         }
     }
 }

@@ -58,7 +58,6 @@
             cmbKursy.Name = "cmbKursy";
             cmbKursy.Size = new Size(316, 33);
             cmbKursy.TabIndex = 1;
-            cmbKursy.SelectedIndexChanged += RejestracjaForm_Load;
             // 
             // label2
             // 
@@ -78,7 +77,6 @@
             cmbUczestnicy.Name = "cmbUczestnicy";
             cmbUczestnicy.Size = new Size(316, 33);
             cmbUczestnicy.TabIndex = 3;
-            cmbUczestnicy.SelectedIndexChanged += RejestracjaForm_Load;
             // 
             // label3
             // 
@@ -139,6 +137,7 @@
             btnAnulujZapis.TabIndex = 9;
             btnAnulujZapis.Text = "Anuluj";
             btnAnulujZapis.UseVisualStyleBackColor = true;
+            btnAnulujZapis.Click += btnAnulujZapis_Click;
             // 
             // RejestracjaForm
             // 
@@ -157,6 +156,7 @@
             Controls.Add(label1);
             Name = "RejestracjaForm";
             Text = "Rejestracja";
+            Load += RejestracjaForm_Load;
             ResumeLayout(false);
             PerformLayout();
         }

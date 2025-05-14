@@ -136,6 +136,7 @@
             // btnZapiszUczestnika
             // 
             btnZapiszUczestnika.AutoSize = true;
+            btnZapiszUczestnika.DialogResult = DialogResult.OK;
             btnZapiszUczestnika.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 238);
             btnZapiszUczestnika.Location = new Point(172, 399);
             btnZapiszUczestnika.Name = "btnZapiszUczestnika";
@@ -148,6 +149,7 @@
             // btnAnulujZapUcz
             // 
             btnAnulujZapUcz.AutoSize = true;
+            btnAnulujZapUcz.DialogResult = DialogResult.Cancel;
             btnAnulujZapUcz.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 238);
             btnAnulujZapUcz.Location = new Point(364, 399);
             btnAnulujZapUcz.Name = "btnAnulujZapUcz";

@@ -10,7 +10,6 @@ namespace projekt_CSharp.Models
 {
     public class Zapis
     {
-        [Key]
         [Column("id")]
         public int Id { get; set; }
 

@@ -96,13 +96,13 @@ namespace projekt_CSharp
                 {
                     _context.Kursy.Add(KursDoEdycji);
                 }
-                else
-                {
-                    _context.Kursy.Update(KursDoEdycji);
-                }
                 _context.SaveChanges();
                 this.DialogResult = DialogResult.OK;
                 this.Close();
+            }
+            catch (DbUpdateException dbEx) 
+            {
+                MessageBox.Show($"Błąd podczas zapisywania danych: {dbEx.InnerException?.Message ?? dbEx.Message}", "Błąd Zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
