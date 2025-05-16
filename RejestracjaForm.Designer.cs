@@ -35,13 +35,13 @@
             label3 = new Label();
             dtpDataZapisu = new DateTimePicker();
             label4 = new Label();
-            cmbStatusPlatnosci = new ComboBox();
             btnDokonajZapisu = new Button();
             btnAnulujZapis = new Button();
             SuspendLayout();
             // 
             // label1
             // 
+            label1.Anchor = AnchorStyles.Left;
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 238);
             label1.Location = new Point(25, 35);
@@ -52,6 +52,7 @@
             // 
             // cmbKursy
             // 
+            cmbKursy.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             cmbKursy.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
             cmbKursy.FormattingEnabled = true;
             cmbKursy.Location = new Point(239, 35);
@@ -61,6 +62,7 @@
             // 
             // label2
             // 
+            label2.Anchor = AnchorStyles.Left;
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 238);
             label2.Location = new Point(25, 91);
@@ -71,6 +73,7 @@
             // 
             // cmbUczestnicy
             // 
+            cmbUczestnicy.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             cmbUczestnicy.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
             cmbUczestnicy.FormattingEnabled = true;
             cmbUczestnicy.Location = new Point(239, 88);
@@ -80,6 +83,7 @@
             // 
             // label3
             // 
+            label3.Anchor = AnchorStyles.Left;
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 238);
             label3.Location = new Point(25, 146);
@@ -90,6 +94,7 @@
             // 
             // dtpDataZapisu
             // 
+            dtpDataZapisu.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             dtpDataZapisu.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 238);
             dtpDataZapisu.Location = new Point(239, 147);
             dtpDataZapisu.Name = "dtpDataZapisu";
@@ -98,6 +103,7 @@
             // 
             // label4
             // 
+            label4.Anchor = AnchorStyles.Left;
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 238);
             label4.Location = new Point(25, 209);
@@ -105,18 +111,11 @@
             label4.Size = new Size(164, 30);
             label4.TabIndex = 6;
             label4.Text = "Status płatności:";
-            // 
-            // cmbStatusPlatnosci
-            // 
-            cmbStatusPlatnosci.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
-            cmbStatusPlatnosci.FormattingEnabled = true;
-            cmbStatusPlatnosci.Location = new Point(239, 206);
-            cmbStatusPlatnosci.Name = "cmbStatusPlatnosci";
-            cmbStatusPlatnosci.Size = new Size(214, 33);
-            cmbStatusPlatnosci.TabIndex = 7;
+           
             // 
             // btnDokonajZapisu
             // 
+            btnDokonajZapisu.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnDokonajZapisu.AutoSize = true;
             btnDokonajZapisu.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 238);
             btnDokonajZapisu.Location = new Point(239, 271);
@@ -129,6 +128,7 @@
             // 
             // btnAnulujZapis
             // 
+            btnAnulujZapis.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             btnAnulujZapis.AutoSize = true;
             btnAnulujZapis.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 238);
             btnAnulujZapis.Location = new Point(465, 271);
@@ -146,7 +146,6 @@
             ClientSize = new Size(579, 323);
             Controls.Add(btnAnulujZapis);
             Controls.Add(btnDokonajZapisu);
-            Controls.Add(cmbStatusPlatnosci);
             Controls.Add(label4);
             Controls.Add(dtpDataZapisu);
             Controls.Add(label3);
@@ -154,6 +153,7 @@
             Controls.Add(label2);
             Controls.Add(cmbKursy);
             Controls.Add(label1);
+            MinimumSize = new Size(595, 362);
             Name = "RejestracjaForm";
             Text = "Rejestracja";
             Load += RejestracjaForm_Load;
@@ -170,7 +170,6 @@
         private Label label3;
         private DateTimePicker dtpDataZapisu;
         private Label label4;
-        private ComboBox cmbStatusPlatnosci;
         private Button btnDokonajZapisu;
         private Button btnAnulujZapis;
     }

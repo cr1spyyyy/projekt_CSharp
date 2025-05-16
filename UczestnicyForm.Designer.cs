@@ -121,6 +121,7 @@
             Controls.Add(dvgUczestnicy);
             Controls.Add(panel1);
             Controls.Add(label1);
+            MinimumSize = new Size(816, 489);
             Name = "UczestnicyForm";
             Text = "UczestnicyForm";
             Load += UczestnicyForm_Load;

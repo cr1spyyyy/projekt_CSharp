@@ -64,7 +64,7 @@
             gbDaneUczestnika.Controls.Add(label2);
             gbDaneUczestnika.Controls.Add(label1);
             gbDaneUczestnika.Dock = DockStyle.Top;
-            gbDaneUczestnika.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 238);
+            gbDaneUczestnika.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
             gbDaneUczestnika.Location = new Point(0, 0);
             gbDaneUczestnika.Name = "gbDaneUczestnika";
             gbDaneUczestnika.Size = new Size(800, 190);
@@ -173,7 +173,7 @@
             gbZapisanyNaKursy.Controls.Add(btnZapiszNaKurs);
             gbZapisanyNaKursy.Controls.Add(dgvKursyUczestnika);
             gbZapisanyNaKursy.Dock = DockStyle.Fill;
-            gbZapisanyNaKursy.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 238);
+            gbZapisanyNaKursy.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
             gbZapisanyNaKursy.Location = new Point(0, 190);
             gbZapisanyNaKursy.Name = "gbZapisanyNaKursy";
             gbZapisanyNaKursy.Size = new Size(800, 340);
@@ -187,9 +187,9 @@
             btnEdytujUczestnika.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 238);
             btnEdytujUczestnika.Location = new Point(173, 185);
             btnEdytujUczestnika.Name = "btnEdytujUczestnika";
-            btnEdytujUczestnika.Size = new Size(82, 31);
+            btnEdytujUczestnika.Size = new Size(177, 31);
             btnEdytujUczestnika.TabIndex = 2;
-            btnEdytujUczestnika.Text = "Edytuj";
+            btnEdytujUczestnika.Text = "Edytuj dane uczestnika";
             btnEdytujUczestnika.UseVisualStyleBackColor = true;
             btnEdytujUczestnika.Click += btnEdytujUczestnika_Click;
             // 
@@ -245,6 +245,7 @@
             Controls.Add(panel1);
             Controls.Add(gbZapisanyNaKursy);
             Controls.Add(gbDaneUczestnika);
+            MinimumSize = new Size(816, 569);
             Name = "UczestnikSzczegolyForm";
             Text = "UczestnikSzczegolyForm";
             Load += UczestnikSzczegolyForm_Load;

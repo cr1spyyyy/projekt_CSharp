@@ -35,8 +35,6 @@ namespace projekt_CSharp
             {
                 WypelnijComboBoxy();
                 dtpDataZapisu.Value = DateTime.Now;
-                cmbStatusPlatnosci.Items.AddRange(new string[] { "Nieopłacony", "Zaliczka", "Opłacony" });
-                cmbStatusPlatnosci.SelectedIndex = 0;
                 if (_domyslnyKursId.HasValue)
                 {
                     var kursDoZaznaczenia = _context.Kursy.Find(_domyslnyKursId.Value);
@@ -118,7 +116,6 @@ namespace projekt_CSharp
                 KursId = kursId,
                 UczestnikId = uczestnikId,
                 DataZapisu = DateTime.UtcNow,
-                StatusPlatnosci = cmbStatusPlatnosci.SelectedItem?.ToString()
             };
 
             try

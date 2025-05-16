@@ -49,6 +49,7 @@
             gbZapisaniUczestnicy = new GroupBox();
             dgvZapisaniNaKurs = new DataGridView();
             panel1 = new Panel();
+            btnZapiszZmiany = new Button();
             gbInformacjeOKursie.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numMaxMiejsca).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numCena).BeginInit();
@@ -74,7 +75,7 @@
             gbInformacjeOKursie.Controls.Add(txtNazwaKursu);
             gbInformacjeOKursie.Controls.Add(label1);
             gbInformacjeOKursie.Dock = DockStyle.Top;
-            gbInformacjeOKursie.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 238);
+            gbInformacjeOKursie.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
             gbInformacjeOKursie.Location = new Point(0, 0);
             gbInformacjeOKursie.Name = "gbInformacjeOKursie";
             gbInformacjeOKursie.Size = new Size(800, 281);
@@ -233,9 +234,9 @@
             btnEdytujKurs.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
             btnEdytujKurs.Location = new Point(204, 163);
             btnEdytujKurs.Name = "btnEdytujKurs";
-            btnEdytujKurs.Size = new Size(75, 30);
+            btnEdytujKurs.Size = new Size(190, 30);
             btnEdytujKurs.TabIndex = 2;
-            btnEdytujKurs.Text = "Edytuj";
+            btnEdytujKurs.Text = "Edytuj informacje o kursie";
             btnEdytujKurs.UseVisualStyleBackColor = true;
             btnEdytujKurs.Click += btnEdytujKurs_Click;
             // 
@@ -257,7 +258,7 @@
             gbZapisaniUczestnicy.Controls.Add(btnEdytujKurs);
             gbZapisaniUczestnicy.Controls.Add(btnZapiszNaKurs);
             gbZapisaniUczestnicy.Dock = DockStyle.Fill;
-            gbZapisaniUczestnicy.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 238);
+            gbZapisaniUczestnicy.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
             gbZapisaniUczestnicy.Location = new Point(0, 281);
             gbZapisaniUczestnicy.Name = "gbZapisaniUczestnicy";
             gbZapisaniUczestnicy.Size = new Size(800, 249);
@@ -278,12 +279,24 @@
             // panel1
             // 
             panel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            panel1.Controls.Add(btnZapiszZmiany);
             panel1.Controls.Add(btnAnuluj);
             panel1.Dock = DockStyle.Bottom;
             panel1.Location = new Point(0, 493);
             panel1.Name = "panel1";
             panel1.Size = new Size(800, 37);
             panel1.TabIndex = 2;
+            // 
+            // btnZapiszZmiany
+            // 
+            btnZapiszZmiany.AutoSize = true;
+            btnZapiszZmiany.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
+            btnZapiszZmiany.Location = new Point(87, 3);
+            btnZapiszZmiany.Name = "btnZapiszZmiany";
+            btnZapiszZmiany.Size = new Size(127, 30);
+            btnZapiszZmiany.TabIndex = 3;
+            btnZapiszZmiany.Text = "Zapisz zmiany";
+            btnZapiszZmiany.UseVisualStyleBackColor = true;
             // 
             // KursSzczegolyForm
             // 
@@ -293,6 +306,7 @@
             Controls.Add(panel1);
             Controls.Add(gbZapisaniUczestnicy);
             Controls.Add(gbInformacjeOKursie);
+            MinimumSize = new Size(816, 569);
             Name = "KursSzczegolyForm";
             Text = "Szczegóły kursu: ";
             Load += KursSzczegolyForm_Load;
@@ -336,5 +350,6 @@
         private Button btnAnuluj;
         private Button btnEdytujKurs;
         private Panel panel1;
+        private Button btnZapiszZmiany;
     }
 }

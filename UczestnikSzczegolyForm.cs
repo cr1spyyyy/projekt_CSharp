@@ -64,7 +64,6 @@ namespace projekt_CSharp
                     z.Kurs.Nazwa,
                     z.Kurs.DataRozpoczecia,
                     z.DataZapisu,
-                    z.StatusPlatnosci
                 })
                 .OrderBy(k => k.Nazwa)
                 .ToList();
@@ -81,7 +80,6 @@ namespace projekt_CSharp
             dgvKursyUczestnika.Columns.Add(new DataGridViewTextBoxColumn { Name = "NazwaKursuColumn", DataPropertyName = "Nazwa", HeaderText = "Nazwa Kursu", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
             dgvKursyUczestnika.Columns.Add(new DataGridViewTextBoxColumn { Name = "DataRozpoczeciaKursuColumn", DataPropertyName = "DataRozpoczecia", HeaderText = "Data Rozp. Kursu", DefaultCellStyle = new DataGridViewCellStyle { Format = "yyyy-MM-dd" }, AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
             dgvKursyUczestnika.Columns.Add(new DataGridViewTextBoxColumn { Name = "DataZapisuNaKursColumn", DataPropertyName = "DataZapisu", HeaderText = "Data Zapisu", DefaultCellStyle = new DataGridViewCellStyle { Format = "yyyy-MM-dd HH:mm" }, AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
-            dgvKursyUczestnika.Columns.Add(new DataGridViewTextBoxColumn { Name = "StatusPlatnosciColumn", DataPropertyName = "StatusPlatnosci", HeaderText = "Status Płatności", AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells });
 
             var colWypisz = new DataGridViewButtonColumn { Name = "WypiszColumn", HeaderText = "Akcja", Text = "Wypisz", UseColumnTextForButtonValue = true, AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader, FlatStyle = FlatStyle.Popup };
             dgvKursyUczestnika.Columns.Add(colWypisz);

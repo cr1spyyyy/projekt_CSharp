@@ -123,6 +123,7 @@
             Controls.Add(dgvKursy);
             Controls.Add(panel1);
             Controls.Add(listaLbl);
+            MinimumSize = new Size(816, 489);
             Name = "KursyForm";
             Text = "Kursy";
             Load += KursyForm_Load;

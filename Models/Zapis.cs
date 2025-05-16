@@ -24,11 +24,7 @@ namespace projekt_CSharp.Models
         [Required]
         [DataType(DataType.DateTime)] 
         [Column("datazapisu")]
-        public DateTime DataZapisu { get; set; } = DateTime.UtcNow;
-
-        [StringLength(50)]
-        [Column("statusplatnosci")]
-        public string? StatusPlatnosci { get; set; } 
+        public DateTime DataZapisu { get; set; } = DateTime.UtcNow; 
 
         [ForeignKey("KursId")]
         public virtual Kurs Kurs { get; set; }
