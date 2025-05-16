@@ -15,11 +15,18 @@ namespace projekt_CSharp
     public partial class RejestracjaForm : Form
     {
         private readonly KursyContext _context;
+        private readonly int? _domyslnyKursId;
+        private readonly int? _domyslnyUczestnikId;
 
-        public RejestracjaForm(KursyContext context)
+        public RejestracjaForm(KursyContext context, int? domyslnyKursId = null, int? domyslnyUczestnikId = null)
         {
             InitializeComponent();
             _context = context;
+            _domyslnyKursId = domyslnyKursId;
+            _domyslnyUczestnikId = domyslnyUczestnikId;
+        }
+        public RejestracjaForm(KursyContext context): this(context, null, null)
+        {
         }
 
         private void RejestracjaForm_Load(object sender, EventArgs e)
@@ -30,6 +37,32 @@ namespace projekt_CSharp
                 dtpDataZapisu.Value = DateTime.Now;
                 cmbStatusPlatnosci.Items.AddRange(new string[] { "Nieopłacony", "Zaliczka", "Opłacony" });
                 cmbStatusPlatnosci.SelectedIndex = 0;
+                if (_domyslnyKursId.HasValue)
+                {
+                    var kursDoZaznaczenia = _context.Kursy.Find(_domyslnyKursId.Value);
+                    if (kursDoZaznaczenia != null)
+                    {
+                        cmbKursy.SelectedValue = _domyslnyKursId.Value;
+                        cmbKursy.Enabled = false;
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Nie znaleziono kursu o ID: {_domyslnyKursId.Value}.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+                if (_domyslnyUczestnikId.HasValue)
+                {
+                    var uczestnikDoZaznaczenia = _context.Uczestnicy.Find(_domyslnyUczestnikId.Value);
+                    if (uczestnikDoZaznaczenia != null)
+                    {
+                        cmbUczestnicy.SelectedValue = _domyslnyUczestnikId.Value;
+                        cmbUczestnicy.Enabled = false;
+                    }
+                    else
+                    {
+                        MessageBox.Show($"Nie znaleziono uczestnika o ID: {_domyslnyUczestnikId.Value}.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -102,14 +135,10 @@ namespace projekt_CSharp
             }
         }
 
-        private void cmbKursy_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
 
         private void btnAnulujZapis_Click(object sender, EventArgs e)
         {
+            this.DialogResult = DialogResult.Cancel;
             Close();
         }
     }

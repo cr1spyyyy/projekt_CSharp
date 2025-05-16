@@ -88,6 +88,8 @@ namespace projekt_CSharp
 
             var colEdit = new DataGridViewButtonColumn { Name = "EditColumn", HeaderText = "Akcje", Text = "Edytuj", UseColumnTextForButtonValue = true, AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader, MinimumWidth = 60, FlatStyle = FlatStyle.Popup };
             dvgUczestnicy.Columns.Add(colEdit);
+            var colDetails = new DataGridViewButtonColumn { Name = "DetailsColumn", HeaderText = "", Text = "Szczegóły", UseColumnTextForButtonValue = true, AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader, MinimumWidth = 75, FlatStyle = FlatStyle.Popup };
+            dvgUczestnicy.Columns.Add(colDetails);
             var colDelete = new DataGridViewButtonColumn { Name = "DeleteColumn", HeaderText = "", Text = "Usuń", UseColumnTextForButtonValue = true, AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader, MinimumWidth = 60, FlatStyle = FlatStyle.Popup };
             dvgUczestnicy.Columns.Add(colDelete);
 
@@ -123,8 +125,8 @@ namespace projekt_CSharp
 
             bool isEditClick = dvgUczestnicy.Columns[e.ColumnIndex].Name == "EditColumn";
             bool isDeleteClick = dvgUczestnicy.Columns[e.ColumnIndex].Name == "DeleteColumn";
-
-            if (!isEditClick && !isDeleteClick) return;
+            bool isDetailsClick = dvgUczestnicy.Columns[e.ColumnIndex].Name == "DetailsColumn";
+            if (!isEditClick && !isDeleteClick && !isDetailsClick) return;
 
             if (!(dvgUczestnicy.Rows[e.RowIndex].Cells["IdColumn"].Value is int uczestnikId))
             {
@@ -151,6 +153,18 @@ namespace projekt_CSharp
                     {
                         LoadUczestnicy(txtSzukajUczestnika.Text);
                     }
+                }
+            }
+            else if (isDetailsClick)
+            {
+                using (var detailsScope = Program.ServiceProvider.CreateScope())
+                {
+                    var detailsContext = detailsScope.ServiceProvider.GetRequiredService<KursyContext>();
+                    var uczestnikSzczegolyForm = new UczestnikSzczegolyForm(detailsContext, uczestnikId);
+                    if (uczestnikSzczegolyForm.ShowDialog()==DialogResult.OK){
+                        LoadUczestnicy(txtSzukajUczestnika.Text);
+                    }
+                    
                 }
             }
             else if (isDeleteClick) 

@@ -128,6 +128,8 @@ namespace projekt_CSharp
 
             var colEdit = new DataGridViewButtonColumn { Name = "EditColumn", HeaderText = "Akcje", Text = "Edytuj", UseColumnTextForButtonValue = true, AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader, MinimumWidth = 60, FlatStyle = FlatStyle.Popup };
             dgvKursy.Columns.Add(colEdit);
+            var colDetails = new DataGridViewButtonColumn { Name = "DetailsColumn", HeaderText = "", Text = "Szczegóły", UseColumnTextForButtonValue = true, AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader, MinimumWidth = 75, FlatStyle = FlatStyle.Popup };
+            dgvKursy.Columns.Add(colDetails);
             var colDelete = new DataGridViewButtonColumn { Name = "DeleteColumn", HeaderText = "", Text = "Usuń", UseColumnTextForButtonValue = true, AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCellsExceptHeader, MinimumWidth = 60, FlatStyle = FlatStyle.Popup };
             dgvKursy.Columns.Add(colDelete);
 
@@ -167,6 +169,19 @@ namespace projekt_CSharp
                     }
                 }
             }
+            else if (dgvKursy.Columns[e.ColumnIndex].Name == "DetailsColumn")
+            {
+                using (var detailsScope = Program.ServiceProvider.CreateScope())
+                {
+                    var detailsContext = detailsScope.ServiceProvider.GetRequiredService<KursyContext>();
+                    var kursSzczegolyForm = new KursSzczegolyForm(detailsContext, kursId);
+                    if(kursSzczegolyForm.ShowDialog() == DialogResult.OK)
+                    {
+                        LoadKursy(txtSzukajKursu.Text);
+                    }
+                }
+            }
+
             else if (dgvKursy.Columns[e.ColumnIndex].Name == "DeleteColumn")
             {
                 string nazwaKursu = dgvKursy.Rows[e.RowIndex].Cells["NazwaColumn"].Value.ToString();
