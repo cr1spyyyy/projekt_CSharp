@@ -34,7 +34,6 @@
             cmbUczestnicy = new ComboBox();
             label3 = new Label();
             dtpDataZapisu = new DateTimePicker();
-            label4 = new Label();
             btnDokonajZapisu = new Button();
             btnAnulujZapis = new Button();
             SuspendLayout();
@@ -101,18 +100,6 @@
             dtpDataZapisu.Size = new Size(316, 29);
             dtpDataZapisu.TabIndex = 5;
             // 
-            // label4
-            // 
-            label4.Anchor = AnchorStyles.Left;
-            label4.AutoSize = true;
-            label4.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 238);
-            label4.Location = new Point(25, 209);
-            label4.Name = "label4";
-            label4.Size = new Size(164, 30);
-            label4.TabIndex = 6;
-            label4.Text = "Status płatności:";
-           
-            // 
             // btnDokonajZapisu
             // 
             btnDokonajZapisu.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
@@ -146,7 +133,6 @@
             ClientSize = new Size(579, 323);
             Controls.Add(btnAnulujZapis);
             Controls.Add(btnDokonajZapisu);
-            Controls.Add(label4);
             Controls.Add(dtpDataZapisu);
             Controls.Add(label3);
             Controls.Add(cmbUczestnicy);
@@ -169,7 +155,6 @@
         private ComboBox cmbUczestnicy;
         private Label label3;
         private DateTimePicker dtpDataZapisu;
-        private Label label4;
         private Button btnDokonajZapisu;
         private Button btnAnulujZapis;
     }

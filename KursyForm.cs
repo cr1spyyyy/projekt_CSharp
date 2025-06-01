@@ -29,8 +29,7 @@ namespace projekt_CSharp
             try
             {
                 _context.ChangeTracker.Clear();
-                IQueryable<Kurs> query = _context.Kursy
-                                                 .Include(k => k.Zapisy);
+                IQueryable<Kurs> query = _context.Kursy.Include(k => k.Zapisy);
 
                 if (!string.IsNullOrWhiteSpace(searchTerm))
                 {
