@@ -22,15 +22,24 @@ namespace projekt_CSharp
         public UczestnikSzczegolyForm(KursyContext context, int uczestnikId)
         {
             InitializeComponent();
+            // Stylizacja
+            this.BackColor = StylAplikacji.Tlo;
+            this.ForeColor = StylAplikacji.Tekst;
+
+            StylAplikacji.UstawStylPrzyciskuAkceptacji(btnEdytujUczestnika);
+            StylAplikacji.UstawStylPrzyciskuAkceptacji(btnZapiszNaKurs);
+            StylAplikacji.UstawStylPrzyciskuAnulowania(btnZamknij);
             _context = context;
             _uczestnikId = uczestnikId;
         }
+        // Konstruktor formularza. Przechowuje kontekst bazy danych i ID uczestnika do wyświetlenia.
         private void UczestnikSzczegolyForm_Load(object sender, EventArgs e) 
         {
             WczytajDaneUczestnika();
             WczytajZapisaneKursy();
             KonfigurujDataGridViewKursow();
         }
+        // Metoda wywoływana po załadowaniu formularza. Inicjuje wczytywanie danych o uczestniku i jego kursach.
         private void WczytajDaneUczestnika()
         {
             _biezacyUczestnik = _context.Uczestnicy.Include(u => u.Zapisy).FirstOrDefault(u => u.Id == _uczestnikId);
@@ -50,6 +59,7 @@ namespace projekt_CSharp
                 this.Close();
             }
         }
+        // Pobiera z bazy danych szczegółowe informacje o bieżącym uczestniku i wypełnia nimi kontrolki na formularzu.
         private void WczytajZapisaneKursy()
         {
             if (_biezacyUczestnik == null) return;
@@ -87,6 +97,7 @@ namespace projekt_CSharp
             dgvKursyUczestnika.AllowUserToAddRows = false;
             dgvKursyUczestnika.ReadOnly = true;
             dgvKursyUczestnika.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            StylAplikacji.UstawStylDataGridView(dgvKursyUczestnika);
         }
         private void dgvKursyUczestnika_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -134,7 +145,7 @@ namespace projekt_CSharp
         }
         private void btnZapiszNaKurs_Click(object sender, EventArgs e) 
         {
-            if (_biezacyUczestnik == null) 
+            if (_biezacyUczestnik == null)
             {
                 MessageBox.Show("Nie można zidentyfikować bieżącego uczestnika.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -142,12 +153,12 @@ namespace projekt_CSharp
             using (var scope = Program.ServiceProvider.CreateScope())
             {
                 var rejestracjaContext = scope.ServiceProvider.GetRequiredService<KursyContext>();
-                var rejestracjaForm = new RejestracjaForm(rejestracjaContext, null, _biezacyUczestnik.Id);
 
+                var rejestracjaForm = new RejestracjaForm(rejestracjaContext, null, _biezacyUczestnik.Id, null, "uczestnik");
                 if (rejestracjaForm.ShowDialog() == DialogResult.OK)
                 {
-                    WczytajZapisaneKursy(); 
-                    this.DialogResult = DialogResult.OK; 
+                    WczytajZapisaneKursy();
+                    this.DialogResult = DialogResult.OK;
                 }
             }
         }

@@ -29,124 +29,94 @@
         private void InitializeComponent()
         {
             label1 = new Label();
-            label2 = new Label();
-            buttonPanel = new Panel();
-            wyjdzBtn = new Button();
-            rejestracjaBtn = new Button();
-            uczestnicyBtn = new Button();
             kursyBtn = new Button();
-            buttonPanel.SuspendLayout();
+            uczestnicyBtn = new Button();
+            panelLeft = new FlowLayoutPanel();
+            panelMain = new Panel();
+            panelLeft.SuspendLayout();
             SuspendLayout();
             // 
             // label1
             // 
-            label1.AutoEllipsis = true;
-            label1.Dock = DockStyle.Top;
-            label1.Font = new Font("Segoe UI", 26.25F, FontStyle.Bold, GraphicsUnit.Point, 238);
-            label1.Location = new Point(0, 0);
+            label1.Anchor = AnchorStyles.Right;
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 238);
+            label1.Location = new Point(398, 3);
+            label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(800, 123);
-            label1.TabIndex = 0;
-            label1.Text = "Rejestr kursów i uczestników";
-            label1.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // label2
-            // 
-            label2.AutoEllipsis = true;
-            label2.Dock = DockStyle.Top;
-            label2.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 238);
-            label2.Location = new Point(0, 123);
-            label2.Name = "label2";
-            label2.Size = new Size(800, 54);
-            label2.TabIndex = 1;
-            label2.Text = "Wybierz, którą tabele otworzyć:";
-            label2.TextAlign = ContentAlignment.TopCenter;
-            // 
-            // buttonPanel
-            // 
-            buttonPanel.Anchor = AnchorStyles.Top;
-            buttonPanel.Controls.Add(wyjdzBtn);
-            buttonPanel.Controls.Add(rejestracjaBtn);
-            buttonPanel.Controls.Add(uczestnicyBtn);
-            buttonPanel.Controls.Add(kursyBtn);
-            buttonPanel.Location = new Point(288, 180);
-            buttonPanel.Name = "buttonPanel";
-            buttonPanel.Size = new Size(229, 261);
-            buttonPanel.TabIndex = 2;
-            // 
-            // wyjdzBtn
-            // 
-            wyjdzBtn.AutoSize = true;
-            wyjdzBtn.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 238);
-            wyjdzBtn.Location = new Point(0, 227);
-            wyjdzBtn.Name = "wyjdzBtn";
-            wyjdzBtn.Size = new Size(226, 31);
-            wyjdzBtn.TabIndex = 3;
-            wyjdzBtn.Text = "Wyjdź";
-            wyjdzBtn.UseVisualStyleBackColor = true;
-            wyjdzBtn.Click += wyjdzBtn_Click;
-            // 
-            // rejestracjaBtn
-            // 
-            rejestracjaBtn.AutoSize = true;
-            rejestracjaBtn.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 238);
-            rejestracjaBtn.Location = new Point(0, 118);
-            rejestracjaBtn.Name = "rejestracjaBtn";
-            rejestracjaBtn.Size = new Size(226, 31);
-            rejestracjaBtn.TabIndex = 2;
-            rejestracjaBtn.Text = "Zarejestruj";
-            rejestracjaBtn.UseVisualStyleBackColor = true;
-            rejestracjaBtn.Click += rejestracjaBtn_Click;
-            // 
-            // uczestnicyBtn
-            // 
-            uczestnicyBtn.AutoSize = true;
-            uczestnicyBtn.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 238);
-            uczestnicyBtn.Location = new Point(0, 61);
-            uczestnicyBtn.Name = "uczestnicyBtn";
-            uczestnicyBtn.Size = new Size(226, 31);
-            uczestnicyBtn.TabIndex = 1;
-            uczestnicyBtn.Text = "Uczestnicy";
-            uczestnicyBtn.UseVisualStyleBackColor = true;
-            uczestnicyBtn.Click += uczestnicyBtn_Click;
+            label1.Size = new Size(286, 30);
+            label1.TabIndex = 3;
+            label1.Text = "System zarządzania kursami";
             // 
             // kursyBtn
             // 
             kursyBtn.AutoSize = true;
             kursyBtn.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 238);
-            kursyBtn.Location = new Point(0, 3);
+            kursyBtn.Location = new Point(2, 3);
+            kursyBtn.Margin = new Padding(2, 3, 2, 3);
             kursyBtn.Name = "kursyBtn";
-            kursyBtn.Size = new Size(226, 31);
+            kursyBtn.Size = new Size(194, 31);
             kursyBtn.TabIndex = 0;
             kursyBtn.Text = "Kursy";
             kursyBtn.UseVisualStyleBackColor = true;
             kursyBtn.Click += kursyBtn_Click;
             // 
+            // uczestnicyBtn
+            // 
+            uczestnicyBtn.AutoSize = true;
+            uczestnicyBtn.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 238);
+            uczestnicyBtn.Location = new Point(200, 3);
+            uczestnicyBtn.Margin = new Padding(2, 3, 2, 3);
+            uczestnicyBtn.Name = "uczestnicyBtn";
+            uczestnicyBtn.Size = new Size(194, 31);
+            uczestnicyBtn.TabIndex = 1;
+            uczestnicyBtn.Text = "Uczestnicy";
+            uczestnicyBtn.UseVisualStyleBackColor = true;
+            uczestnicyBtn.Click += uczestnicyBtn_Click;
+            // 
+            // panelLeft
+            // 
+            panelLeft.AutoSize = true;
+            panelLeft.Controls.Add(kursyBtn);
+            panelLeft.Controls.Add(uczestnicyBtn);
+            panelLeft.Controls.Add(label1);
+            panelLeft.Dock = DockStyle.Top;
+            panelLeft.Location = new Point(0, 0);
+            panelLeft.Name = "panelLeft";
+            panelLeft.Size = new Size(938, 37);
+            panelLeft.TabIndex = 5;
+            // 
+            // panelMain
+            // 
+            panelMain.Dock = DockStyle.Fill;
+            panelMain.Location = new Point(0, 37);
+            panelMain.Name = "panelMain";
+            panelMain.Size = new Size(938, 404);
+            panelMain.TabIndex = 6;
+            // 
             // MenuForm
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(buttonPanel);
-            Controls.Add(label2);
-            Controls.Add(label1);
-            Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 238);
-            MinimumSize = new Size(400, 489);
+            ClientSize = new Size(938, 441);
+            Controls.Add(panelMain);
+            Controls.Add(panelLeft);
+            Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
+            Margin = new Padding(2, 3, 2, 3);
+            MinimumSize = new Size(345, 429);
             Name = "MenuForm";
             Text = "Menu Główne";
-            buttonPanel.ResumeLayout(false);
-            buttonPanel.PerformLayout();
+            panelLeft.ResumeLayout(false);
+            panelLeft.PerformLayout();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
-
         private Label label1;
-        private Label label2;
-        private Panel buttonPanel;
-        private Button wyjdzBtn;
-        private Button rejestracjaBtn;
-        private Button uczestnicyBtn;
         private Button kursyBtn;
+        private Button uczestnicyBtn;
+        private FlowLayoutPanel panelLeft;
+        private Panel panelMain;
     }
 }

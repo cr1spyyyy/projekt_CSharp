@@ -1,16 +1,16 @@
 ﻿namespace projekt_CSharp
 {
-    partial class KursyForm
+    partial class KursyUC
     {
-        /// <summary>
-        /// Required designer variable.
+        /// <summary> 
+        /// Wymagana zmienna projektanta.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
+        /// <summary> 
+        /// Wyczyść wszystkie używane zasoby.
         /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        /// <param name="disposing">prawda, jeżeli zarządzane zasoby powinny zostać zlikwidowane; Fałsz w przeciwnym wypadku.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,48 +20,35 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
+        #region Kod wygenerowany przez Projektanta składników
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        /// <summary> 
+        /// Metoda wymagana do obsługi projektanta — nie należy modyfikować 
+        /// jej zawartości w edytorze kodu.
         /// </summary>
         private void InitializeComponent()
         {
-            listaLbl = new Label();
-            panel1 = new Panel();
+            panelTop = new Panel();
             szukajBtn = new Button();
             txtSzukajKursu = new TextBox();
             label1 = new Label();
             dodajBtn = new Button();
             dgvKursy = new DataGridView();
-            panel1.SuspendLayout();
+            panelTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvKursy).BeginInit();
             SuspendLayout();
             // 
-            // listaLbl
+            // panelTop
             // 
-            listaLbl.AutoSize = true;
-            listaLbl.Dock = DockStyle.Top;
-            listaLbl.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 238);
-            listaLbl.Location = new Point(0, 0);
-            listaLbl.Margin = new Padding(10, 10, 3, 0);
-            listaLbl.Name = "listaLbl";
-            listaLbl.Size = new Size(159, 32);
-            listaLbl.TabIndex = 0;
-            listaLbl.Text = "Lista Kursów";
-            // 
-            // panel1
-            // 
-            panel1.Controls.Add(szukajBtn);
-            panel1.Controls.Add(txtSzukajKursu);
-            panel1.Controls.Add(label1);
-            panel1.Controls.Add(dodajBtn);
-            panel1.Dock = DockStyle.Top;
-            panel1.Location = new Point(0, 32);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(800, 64);
-            panel1.TabIndex = 1;
+            panelTop.Controls.Add(szukajBtn);
+            panelTop.Controls.Add(txtSzukajKursu);
+            panelTop.Controls.Add(label1);
+            panelTop.Controls.Add(dodajBtn);
+            panelTop.Dock = DockStyle.Top;
+            panelTop.Location = new Point(0, 0);
+            panelTop.Name = "panelTop";
+            panelTop.Size = new Size(815, 64);
+            panelTop.TabIndex = 2;
             // 
             // szukajBtn
             // 
@@ -73,7 +60,7 @@
             szukajBtn.TabIndex = 3;
             szukajBtn.Text = "Wyszukaj";
             szukajBtn.UseVisualStyleBackColor = true;
-            szukajBtn.Click += szukajBtn_Click;
+            szukajBtn.Click += btnSzukaj_Click;
             // 
             // txtSzukajKursu
             // 
@@ -81,7 +68,6 @@
             txtSzukajKursu.Name = "txtSzukajKursu";
             txtSzukajKursu.Size = new Size(343, 23);
             txtSzukajKursu.TabIndex = 2;
-            txtSzukajKursu.TextChanged += txtSzukajKursu_TextChanged;
             // 
             // label1
             // 
@@ -97,51 +83,45 @@
             // 
             dodajBtn.AutoSize = true;
             dodajBtn.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 238);
-            dodajBtn.Location = new Point(22, 16);
+            dodajBtn.Location = new Point(22, 18);
             dodajBtn.Name = "dodajBtn";
-            dodajBtn.Size = new Size(137, 31);
+            dodajBtn.Size = new Size(163, 31);
             dodajBtn.TabIndex = 0;
             dodajBtn.Text = "Dodaj nowy kurs";
             dodajBtn.UseVisualStyleBackColor = true;
-            dodajBtn.Click += dodajBtn_Click;
+            dodajBtn.Click += btnDodaj_Click;
             // 
             // dgvKursy
             // 
             dgvKursy.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvKursy.Dock = DockStyle.Fill;
-            dgvKursy.Location = new Point(0, 96);
+            dgvKursy.Location = new Point(0, 64);
             dgvKursy.Name = "dgvKursy";
-            dgvKursy.Size = new Size(800, 354);
-            dgvKursy.TabIndex = 2;
+            dgvKursy.Size = new Size(815, 370);
+            dgvKursy.TabIndex = 3;
             dgvKursy.CellContentClick += dgvKursy_CellContentClick;
             // 
-            // KursyForm
+            // KursyUC
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
             Controls.Add(dgvKursy);
-            Controls.Add(panel1);
-            Controls.Add(listaLbl);
-            MinimumSize = new Size(816, 489);
-            Name = "KursyForm";
-            Text = "Kursy";
-            Load += KursyForm_Load;
-            panel1.ResumeLayout(false);
-            panel1.PerformLayout();
+            Controls.Add(panelTop);
+            Name = "KursyUC";
+            Size = new Size(815, 434);
+            panelTop.ResumeLayout(false);
+            panelTop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvKursy).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
 
-        private Label listaLbl;
-        private Panel panel1;
-        private Button dodajBtn;
+        private Panel panelTop;
         private Button szukajBtn;
         private TextBox txtSzukajKursu;
         private Label label1;
+        private Button dodajBtn;
         private DataGridView dgvKursy;
     }
 }

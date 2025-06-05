@@ -1,63 +1,95 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
-using projekt_CSharp.Models;
-using projekt_CSharp.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using projekt_CSharp.Data;
+using projekt_CSharp.Models;
+
 namespace projekt_CSharp
 {
-    public partial class KursyForm : Form
+    public partial class KursyUC : UserControl
     {
         private readonly KursyContext _context;
-
-        public KursyForm(KursyContext context)
+        private BindingSource _kursyBinding = new BindingSource();
+        // Konstruktor kontrolki KursyUC
+        public KursyUC(KursyContext context)
         {
             InitializeComponent();
             _context = context;
+            // Stylizacja
+            this.BackColor = StylAplikacji.Tlo;
+            this.ForeColor = StylAplikacji.Tekst;
+            panelTop.BackColor = StylAplikacji.Panel;
+            label1.ForeColor = StylAplikacji.Tekst;
+
+            StylAplikacji.UstawStylPrzyciskuAkceptacji(szukajBtn);
+            StylAplikacji.UstawStylPrzyciskuAkceptacji(dodajBtn);
+            dgvKursy.DataSource = _kursyBinding;
+            this.Load += KursyUC_Load;
+
         }
 
-        private void KursyForm_Load(object sender, EventArgs e)
+        private void KursyUC_Load(object sender, EventArgs e)
         {
-            LoadKursy();
+            WczytajKursy();
         }
-
-        private void LoadKursy(string searchTerm = null)
+        // Pobiera dane o kursach z bazy, filtruje je na podstawie kryterium wyszukiwania i przypisuje do tabeli.
+        private void WczytajKursy(string search = null)
         {
             try
             {
                 _context.ChangeTracker.Clear();
                 IQueryable<Kurs> query = _context.Kursy.Include(k => k.Zapisy);
 
-                if (!string.IsNullOrWhiteSpace(searchTerm))
+                if (!string.IsNullOrWhiteSpace(search))
                 {
-                    string lowerSearchTerm = searchTerm.ToLower();
+                    string lowerSearchTerm = search.ToLower();
                     query = query.Where(k => k.Nazwa.ToLower().Contains(lowerSearchTerm) ||
                                              (k.Prowadzacy != null && k.Prowadzacy.ToLower().Contains(lowerSearchTerm)));
                 }
 
-                var kursyList = query.OrderBy(k => k.Nazwa).ToList();
+                var kursyList = query
+                    .OrderBy(k => k.Nazwa)
+                    .Select(k => new
+                    {
+                        k.Id,
+                        k.Nazwa,
+                        k.Prowadzacy,
+                        k.DataRozpoczecia,
+                        k.DataZakonczenia,
+                        Miejsca = $"{k.Zapisy.Count}/{k.MaksymalnaLiczbaUczestnikow}",
+                        k.Cena
+                    })
+                    .ToList();
 
                 ConfigureDataGridView();
 
-                if (kursyList.Any())
-                {
-                    dgvKursy.DataSource = kursyList;
-                }
-                else
-                {
-                    dgvKursy.DataSource = null;
-                    string message = string.IsNullOrWhiteSpace(searchTerm)
-                        ? "Brak kursów w bazie danych."
-                        : $"Nie znaleziono kursów dla frazy: '{searchTerm}'.";
-                    MessageBox.Show(message, "Informacja", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                dgvKursy.DataSource = kursyList;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Wystąpił błąd podczas ładowania danych kursów: {ex.Message}\n\nSzczegóły: {ex.InnerException?.Message}", "Błąd Krytyczny", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        // Obsługuje kliknięcie przycisku "Szukaj". Uruchamia ponowne wczytanie kursów z filtrowaniem.
+        private void btnSzukaj_Click(object sender, EventArgs e)
+        {
+            WczytajKursy(txtSzukajKursu.Text);
+        }
+
+        private void btnDodaj_Click(object sender, EventArgs e)
+        {
+            using (var form = new EdytujKursForm(_context))
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                    WczytajKursy(txtSzukajKursu.Text);
             }
         }
 
@@ -66,13 +98,6 @@ namespace projekt_CSharp
             dgvKursy.AutoGenerateColumns = false;
             dgvKursy.Columns.Clear();
 
-            dgvKursy.Columns.Add(new DataGridViewTextBoxColumn
-            {
-                Name = "IdColumn",
-                DataPropertyName = "Id",
-                HeaderText = "ID",
-                Visible = false
-            });
             dgvKursy.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "NazwaColumn",
@@ -110,8 +135,8 @@ namespace projekt_CSharp
             dgvKursy.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "MiejscaColumn",
-                DataPropertyName = "InfoOMiejscach",
-                HeaderText = "Miejsca",
+                DataPropertyName = "Miejsca",
+                HeaderText = "Ilosc zapisanych",
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
                 FillWeight = 15
             });
@@ -139,6 +164,7 @@ namespace projekt_CSharp
             dgvKursy.MultiSelect = false;
             dgvKursy.ColumnHeadersDefaultCellStyle.Font = new Font(dgvKursy.Font, FontStyle.Bold);
             dgvKursy.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
+            StylAplikacji.UstawStylDataGridView(dgvKursy);
         }
 
 
@@ -146,25 +172,27 @@ namespace projekt_CSharp
         {
             if (e.RowIndex < 0) return;
 
-            int kursId = (int)dgvKursy.Rows[e.RowIndex].Cells["IdColumn"].Value;
+            var rowObj = dgvKursy.Rows[e.RowIndex].DataBoundItem;
+            if (rowObj == null) return;
+            int kursId = (int)rowObj.GetType().GetProperty("Id").GetValue(rowObj);
 
             if (dgvKursy.Columns[e.ColumnIndex].Name == "EditColumn")
             {
                 using (var editScope = Program.ServiceProvider.CreateScope())
                 {
                     var editContext = editScope.ServiceProvider.GetRequiredService<KursyContext>();
-                    var kursDoEdycjiZBazy = editContext.Kursy.FirstOrDefault(k => k.Id == kursId);
+                    var kursDoEdycji = editContext.Kursy.FirstOrDefault(k => k.Id == kursId);
 
-                    if (kursDoEdycjiZBazy == null)
+                    if (kursDoEdycji == null)
                     {
                         MessageBox.Show("Nie znaleziono kursu do edycji.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
-                    var edytujKursForm = new EdytujKursForm(editContext, kursDoEdycjiZBazy);
+                    var edytujKursForm = new EdytujKursForm(editContext, kursDoEdycji);
                     if (edytujKursForm.ShowDialog() == DialogResult.OK)
                     {
-                        LoadKursy(txtSzukajKursu.Text); 
+                        WczytajKursy(txtSzukajKursu.Text);
                     }
                 }
             }
@@ -174,56 +202,30 @@ namespace projekt_CSharp
                 {
                     var detailsContext = detailsScope.ServiceProvider.GetRequiredService<KursyContext>();
                     var kursSzczegolyForm = new KursSzczegolyForm(detailsContext, kursId);
-                    if(kursSzczegolyForm.ShowDialog() == DialogResult.OK)
+                    if (kursSzczegolyForm.ShowDialog() == DialogResult.OK)
                     {
-                        LoadKursy(txtSzukajKursu.Text);
+                        WczytajKursy(txtSzukajKursu.Text);
                     }
                 }
             }
-
             else if (dgvKursy.Columns[e.ColumnIndex].Name == "DeleteColumn")
             {
-                string nazwaKursu = dgvKursy.Rows[e.RowIndex].Cells["NazwaColumn"].Value.ToString();
-                if (MessageBox.Show($"Czy na pewno chcesz usunąć kurs: '{nazwaKursu}'?", "Potwierdzenie", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                string nazwaKursu = dgvKursy.Rows[e.RowIndex].Cells["NazwaColumn"].Value?.ToString() ?? "";
+                if (MessageBox.Show($"Czy na pewno chcesz usunąć kurs: '{nazwaKursu}'? Wszyscy zapisani uczestnicy zostaną z niego wypisani.", "Potwierdzenie", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                 {
                     var kursDoUsuniecia = _context.Kursy.Include(k => k.Zapisy).FirstOrDefault(k => k.Id == kursId);
                     if (kursDoUsuniecia != null)
                     {
-                        if (kursDoUsuniecia.Zapisy.Any())
-                        {
-                            MessageBox.Show("Nie można usunąć kursu, ponieważ są do niego zapisani uczestnicy.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
+                        // Usuń wszystkie zapisy powiązane z tym kursem
+                        _context.Zapisy.RemoveRange(kursDoUsuniecia.Zapisy);
+                        // A następnie sam kurs
                         _context.Kursy.Remove(kursDoUsuniecia);
                         _context.SaveChanges();
-                        LoadKursy();
+                        WczytajKursy();
+                        MessageBox.Show("Kurs i wszystkie powiązane z nim zapisy zostały pomyślnie usunięte.", "Sukces", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
-        }
-
-        private void dodajBtn_Click(object sender, EventArgs e)
-        {
-            using (var addScope = Program.ServiceProvider.CreateScope())
-            {
-                var addContext = addScope.ServiceProvider.GetRequiredService<KursyContext>();
-                var edytujKursForm = new EdytujKursForm(addContext, null);
-                if (edytujKursForm.ShowDialog() == DialogResult.OK)
-                {
-                    
-                    LoadKursy(txtSzukajKursu.Text); 
-                }
-            }
-        }
-
-        private void szukajBtn_Click(object sender, EventArgs e)
-        {
-            LoadKursy(txtSzukajKursu.Text);
-        }
-
-        private void txtSzukajKursu_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

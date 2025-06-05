@@ -51,7 +51,6 @@
             label1.Size = new Size(65, 32);
             label1.TabIndex = 0;
             label1.Text = "Imie:";
-            label1.Click += label1_Click;
             // 
             // txtImie
             // 
@@ -132,6 +131,7 @@
             dtpDataUrodzenia.Name = "dtpDataUrodzenia";
             dtpDataUrodzenia.Size = new Size(300, 29);
             dtpDataUrodzenia.TabIndex = 9;
+            dtpDataUrodzenia.Value = new DateTime(2025, 6, 5, 22, 59, 26, 0);
             // 
             // btnZapiszUczestnika
             // 

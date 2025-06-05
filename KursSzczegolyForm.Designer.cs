@@ -49,7 +49,6 @@
             gbZapisaniUczestnicy = new GroupBox();
             dgvZapisaniNaKurs = new DataGridView();
             panel1 = new Panel();
-            btnZapiszZmiany = new Button();
             gbInformacjeOKursie.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numMaxMiejsca).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numCena).BeginInit();
@@ -279,24 +278,12 @@
             // panel1
             // 
             panel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            panel1.Controls.Add(btnZapiszZmiany);
             panel1.Controls.Add(btnAnuluj);
             panel1.Dock = DockStyle.Bottom;
             panel1.Location = new Point(0, 493);
             panel1.Name = "panel1";
             panel1.Size = new Size(800, 37);
             panel1.TabIndex = 2;
-            // 
-            // btnZapiszZmiany
-            // 
-            btnZapiszZmiany.AutoSize = true;
-            btnZapiszZmiany.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 238);
-            btnZapiszZmiany.Location = new Point(87, 3);
-            btnZapiszZmiany.Name = "btnZapiszZmiany";
-            btnZapiszZmiany.Size = new Size(127, 30);
-            btnZapiszZmiany.TabIndex = 3;
-            btnZapiszZmiany.Text = "Zapisz zmiany";
-            btnZapiszZmiany.UseVisualStyleBackColor = true;
             // 
             // KursSzczegolyForm
             // 
@@ -350,6 +337,5 @@
         private Button btnAnuluj;
         private Button btnEdytujKurs;
         private Panel panel1;
-        private Button btnZapiszZmiany;
     }
 }

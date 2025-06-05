@@ -103,7 +103,7 @@
             dtpDataRozpoczecia.Name = "dtpDataRozpoczecia";
             dtpDataRozpoczecia.Size = new Size(285, 29);
             dtpDataRozpoczecia.TabIndex = 5;
-            dtpDataRozpoczecia.Value = new DateTime(2025, 5, 25, 23, 59, 59, 0);
+            dtpDataRozpoczecia.Value = new DateTime(2025, 6, 5, 22, 58, 48, 0);
             dtpDataRozpoczecia.ValueChanged += dtpDataRozpoczecia_ValueChanged;
             // 
             // label4
@@ -126,6 +126,7 @@
             dtpDataZakonczenia.Name = "dtpDataZakonczenia";
             dtpDataZakonczenia.Size = new Size(285, 29);
             dtpDataZakonczenia.TabIndex = 7;
+            dtpDataZakonczenia.Value = new DateTime(2025, 6, 5, 22, 59, 36, 0);
             // 
             // label5
             // 
@@ -145,7 +146,6 @@
             numMaxUczestnikow.Name = "numMaxUczestnikow";
             numMaxUczestnikow.Size = new Size(120, 29);
             numMaxUczestnikow.TabIndex = 9;
-            numMaxUczestnikow.ValueChanged += numMaxUczestnikow_ValueChanged;
             // 
             // label6
             // 

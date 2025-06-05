@@ -19,19 +19,29 @@ namespace projekt_CSharp
         private readonly KursyContext _context;
         private readonly int _kursId;
         private Kurs _biezacyKurs;
+        // Konstruktor KursSzczegolyForm
         public KursSzczegolyForm(KursyContext context, int kursId)
         {
             InitializeComponent();
+            // Stylizacja
+            this.BackColor = StylAplikacji.Tlo;
+            this.ForeColor = StylAplikacji.Tekst;
+
+            StylAplikacji.UstawStylPrzyciskuAkceptacji(btnEdytujKurs);
+            StylAplikacji.UstawStylPrzyciskuAkceptacji(btnZapiszNaKurs);
+            StylAplikacji.UstawStylPrzyciskuAnulowania(btnAnuluj);
             _context = context;
             _kursId = kursId;
             UstawKontrolkiKursuReadOnly(true);
         }
+        // Metoda wywoływana po załadowaniu formularza. Inicjuje wczytywanie danych o kursie i uczestnikach.
         private void KursSzczegolyForm_Load(object sender, EventArgs e) 
         {
             WczytajDaneKursu();
             WczytajZapisanychUczestnikow();
             KonfigurujDataGridViewUczestnikow();
         }
+        // Przełącza kontrolki formularza między trybem tylko do odczytu a trybem edycji.
         private void UstawKontrolkiKursuReadOnly(bool isReadOnly)
         {
             txtNazwaKursu.ReadOnly = isReadOnly;
@@ -51,6 +61,7 @@ namespace projekt_CSharp
                 btnEdytujKurs.Text = "Zapisz Zmiany";
             }
         }
+        // Pobiera z bazy danych szczegółowe informacje o bieżącym kursie i wypełnia nimi kontrolki na formularzu.
         private void WczytajDaneKursu()
         {
             _biezacyKurs = _context.Kursy.Include(k => k.Zapisy).FirstOrDefault(k => k.Id == _kursId);
@@ -104,6 +115,7 @@ namespace projekt_CSharp
 
             dgvZapisaniNaKurs.DataSource = zapisani;
         }
+        // Definiuje strukturę, wygląd i zachowanie tabeli (DataGridView) z listą uczestników.
         private void KonfigurujDataGridViewUczestnikow()
         {
             dgvZapisaniNaKurs.AutoGenerateColumns = false;
@@ -122,7 +134,9 @@ namespace projekt_CSharp
             dgvZapisaniNaKurs.AllowUserToAddRows = false;
             dgvZapisaniNaKurs.ReadOnly = true; 
             dgvZapisaniNaKurs.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            StylAplikacji.UstawStylDataGridView(dgvZapisaniNaKurs);
         }
+        // Obsługuje kliknięcia wewnątrz komórek tabeli uczestników, głównie dla przycisku "Wypisz".
         private void dgvZapisaniNaKurs_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0) return;
@@ -147,6 +161,7 @@ namespace projekt_CSharp
             }
 
         }
+        // Obsługuje przycisk "Edytuj Dane Kursu" / "Zapisz Zmiany". Przełącza tryb formularza lub zapisuje zmiany.
         private void btnEdytujKurs_Click(object sender, EventArgs e) 
         {
             if (txtNazwaKursu.ReadOnly)
@@ -159,8 +174,8 @@ namespace projekt_CSharp
 
                 _biezacyKurs.Nazwa = txtNazwaKursu.Text.Trim();
                 _biezacyKurs.Opis = txtOpisKursu.Text.Trim();
-                _biezacyKurs.DataRozpoczecia = dtpDataRozpoczecia.Value.Date;
-                _biezacyKurs.DataZakonczenia = dtpDataZakonczenia.Checked ? (DateTime?)dtpDataZakonczenia.Value.Date : null;
+                _biezacyKurs.DataRozpoczecia = dtpDataRozpoczecia.Value.ToUniversalTime();
+                _biezacyKurs.DataZakonczenia = dtpDataZakonczenia.Checked ? (DateTime?)dtpDataZakonczenia.Value.ToUniversalTime() : null;
                 _biezacyKurs.Prowadzacy = txtProwadzacy.Text.Trim();
                 _biezacyKurs.Cena = numCena.Value;
                 _biezacyKurs.MaksymalnaLiczbaUczestnikow = (int)numMaxMiejsca.Value;
@@ -202,7 +217,10 @@ namespace projekt_CSharp
             using (var scope = Program.ServiceProvider.CreateScope())
             {
                 var rejestracjaContext = scope.ServiceProvider.GetRequiredService<KursyContext>();
-                var rejestracjaForm = new RejestracjaForm(rejestracjaContext, _kursId, null);
+                // Pobierz nazwę kursu
+                var kurs = _context.Kursy.Find(_kursId);
+                string nazwaKursu = kurs?.Nazwa ?? "";
+                var rejestracjaForm = new RejestracjaForm(rejestracjaContext, _kursId, null, nazwaKursu, "kurs");
                 if (rejestracjaForm.ShowDialog() == DialogResult.OK)
                 {
                     WczytajDaneKursu();

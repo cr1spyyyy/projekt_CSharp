@@ -32,8 +32,6 @@
             cmbKursy = new ComboBox();
             label2 = new Label();
             cmbUczestnicy = new ComboBox();
-            label3 = new Label();
-            dtpDataZapisu = new DateTimePicker();
             btnDokonajZapisu = new Button();
             btnAnulujZapis = new Button();
             SuspendLayout();
@@ -58,6 +56,7 @@
             cmbKursy.Name = "cmbKursy";
             cmbKursy.Size = new Size(316, 33);
             cmbKursy.TabIndex = 1;
+            cmbKursy.SelectedIndexChanged += cmbKursy_SelectedIndexChanged;
             // 
             // label2
             // 
@@ -79,26 +78,6 @@
             cmbUczestnicy.Name = "cmbUczestnicy";
             cmbUczestnicy.Size = new Size(316, 33);
             cmbUczestnicy.TabIndex = 3;
-            // 
-            // label3
-            // 
-            label3.Anchor = AnchorStyles.Left;
-            label3.AutoSize = true;
-            label3.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point, 238);
-            label3.Location = new Point(25, 146);
-            label3.Name = "label3";
-            label3.Size = new Size(127, 30);
-            label3.TabIndex = 4;
-            label3.Text = "Data zapisu:";
-            // 
-            // dtpDataZapisu
-            // 
-            dtpDataZapisu.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            dtpDataZapisu.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 238);
-            dtpDataZapisu.Location = new Point(239, 147);
-            dtpDataZapisu.Name = "dtpDataZapisu";
-            dtpDataZapisu.Size = new Size(316, 29);
-            dtpDataZapisu.TabIndex = 5;
             // 
             // btnDokonajZapisu
             // 
@@ -133,8 +112,6 @@
             ClientSize = new Size(579, 323);
             Controls.Add(btnAnulujZapis);
             Controls.Add(btnDokonajZapisu);
-            Controls.Add(dtpDataZapisu);
-            Controls.Add(label3);
             Controls.Add(cmbUczestnicy);
             Controls.Add(label2);
             Controls.Add(cmbKursy);
@@ -153,8 +130,6 @@
         private ComboBox cmbKursy;
         private Label label2;
         private ComboBox cmbUczestnicy;
-        private Label label3;
-        private DateTimePicker dtpDataZapisu;
         private Button btnDokonajZapisu;
         private Button btnAnulujZapis;
     }

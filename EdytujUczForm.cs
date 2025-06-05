@@ -19,27 +19,42 @@ namespace projekt_CSharp
         private readonly KursyContext _context;
         public Uczestnik UczestnikDoEdycji { get; private set; }
         private bool _isNewUczestnik;
-
+        // Konstruktor EdytujUczForm
         public EdytujUczForm(KursyContext context, Uczestnik uczestnik = null)
         {
             InitializeComponent();
             _context = context;
 
+            // Stylizacja
+            this.BackColor = StylAplikacji.Tlo;
+            this.ForeColor = StylAplikacji.Tekst;
+
+            StylAplikacji.UstawStylPrzyciskuAkceptacji(btnZapiszUczestnika);
+            StylAplikacji.UstawStylPrzyciskuAnulowania(btnAnulujZapUcz);
+
+            // Ustawienie kolorów dla wszystkich labeli
+            foreach (var lbl in this.Controls.OfType<Label>())
+            {
+                lbl.ForeColor = StylAplikacji.Tekst;
+            }
+
             if (uczestnik == null)
             {
+                // Tworzenie nowego uczestnika
                 UczestnikDoEdycji = new Uczestnik();
                 _isNewUczestnik = true;
                 this.Text = "Dodaj Nowego Uczestnika";
             }
             else
             {
+                // Edycja istniejącego uczestnika
                 UczestnikDoEdycji = uczestnik;
                 _isNewUczestnik = false;
                 this.Text = $"Edytuj Dane Uczestnika: {UczestnikDoEdycji.PelneImie}";
                 WypelnijPola();
             }
         }
-
+        // Wypełnia pola formularza danymi z obiektu UczestnikDoEdycji, gdy formularz jest w trybie edycji.
         private void WypelnijPola()
         {
             txtImie.Text = UczestnikDoEdycji.Imie;
@@ -57,10 +72,6 @@ namespace projekt_CSharp
             }
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void btnAnulujZapUcz_Click(object sender, EventArgs e)
         {
@@ -74,9 +85,49 @@ namespace projekt_CSharp
             UczestnikDoEdycji.Email = txtEmail.Text.Trim();
             UczestnikDoEdycji.NumerTelefonu = txtNumerTelefonu.Text.Trim();
             if (string.IsNullOrWhiteSpace(UczestnikDoEdycji.NumerTelefonu)) UczestnikDoEdycji.NumerTelefonu = null;
-
             UczestnikDoEdycji.DataUrodzenia = dtpDataUrodzenia.Checked ? (DateTime?)dtpDataUrodzenia.Value.ToUniversalTime() : null;
 
+            if (string.IsNullOrWhiteSpace(UczestnikDoEdycji.Imie) || !System.Text.RegularExpressions.Regex.IsMatch(UczestnikDoEdycji.Imie, @"^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż\- ]+$"))
+            {
+                MessageBox.Show("Imię może zawierać tylko litery, myślniki i spacje.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(UczestnikDoEdycji.Nazwisko) || !System.Text.RegularExpressions.Regex.IsMatch(UczestnikDoEdycji.Nazwisko, @"^[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż\- ]+$"))
+            {
+                MessageBox.Show("Nazwisko może zawierać tylko litery, myślniki i spacje.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(UczestnikDoEdycji.Email) || !UczestnikDoEdycji.Email.Contains("@"))
+            {
+                MessageBox.Show("Podaj poprawny adres email zawierający znak @.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            bool emailExists = _isNewUczestnik
+                ? _context.Uczestnicy.Any(u => u.Email == UczestnikDoEdycji.Email)
+                : _context.Uczestnicy.Any(u => u.Email == UczestnikDoEdycji.Email && u.Id != UczestnikDoEdycji.Id);
+            if (emailExists)
+            {
+                MessageBox.Show("Uczestnik z podanym adresem email już istnieje w bazie danych.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(UczestnikDoEdycji.NumerTelefonu))
+            {
+                if (!System.Text.RegularExpressions.Regex.IsMatch(UczestnikDoEdycji.NumerTelefonu, @"^(\+?\d{1,3}[\s-]?)?\(?\d{2,3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$|^(\d{9})$"))
+                {
+                    MessageBox.Show("Podaj poprawny numer telefonu.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                bool telExists = _isNewUczestnik
+                    ? _context.Uczestnicy.Any(u => u.NumerTelefonu == UczestnikDoEdycji.NumerTelefonu)
+                    : _context.Uczestnicy.Any(u => u.NumerTelefonu == UczestnikDoEdycji.NumerTelefonu && u.Id != UczestnikDoEdycji.Id);
+                if (telExists)
+                {
+                    MessageBox.Show("Uczestnik z podanym numerem telefonu już istnieje w bazie danych.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+            }
+
+            // Walidacja atrybutów
             var validationContext = new ValidationContext(UczestnikDoEdycji, null, null);
             var validationResults = new List<ValidationResult>();
             bool isValid = Validator.TryValidateObject(UczestnikDoEdycji, validationContext, validationResults, true);
@@ -88,26 +139,9 @@ namespace projekt_CSharp
                 return;
             }
 
-            // Sprawdzenie unikalności emaila, jeśli to nowy uczestnik lub email został zmieniony
-            bool emailExists;
-            if (_isNewUczestnik)
-            {
-                emailExists = _context.Uczestnicy.Any(u => u.Email == UczestnikDoEdycji.Email);
-            }
-            else
-            {
-                emailExists = _context.Uczestnicy.Any(u => u.Email == UczestnikDoEdycji.Email && u.Id != UczestnikDoEdycji.Id);
-            }
-
-            if (emailExists)
-            {
-                MessageBox.Show("Uczestnik z podanym adresem email już istnieje w bazie danych.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-
             try
             {
+                // Zapisanie lub aktualizacja uczestnika w bazie danych
                 if (_isNewUczestnik)
                 {
                     _context.Uczestnicy.Add(UczestnikDoEdycji);

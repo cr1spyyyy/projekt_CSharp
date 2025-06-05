@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using projekt_CSharp.Data;
 using projekt_CSharp.Models;
 using Microsoft.Extensions.DependencyInjection;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 namespace projekt_CSharp
 {
     public partial class EdytujKursForm : Form
@@ -19,12 +20,17 @@ namespace projekt_CSharp
         private readonly KursyContext _context;
         public Kurs KursDoEdycji { get; private set; }
         private bool _isNewKurs;
-
+        // Konstruktor EdytujKursForm
         public EdytujKursForm(KursyContext context, Kurs kurs = null)
         {
             InitializeComponent();
             _context = context;
+            // Stylizacja
+            this.BackColor = StylAplikacji.Tlo;
+            this.ForeColor = StylAplikacji.Tekst;
 
+            StylAplikacji.UstawStylPrzyciskuAkceptacji(btnZapiszKurs);
+            StylAplikacji.UstawStylPrzyciskuAnulowania(btnAnuluj);
             if (kurs == null)
             {
                 KursDoEdycji = new Kurs(); // Tworzenie nowego kursu
@@ -39,6 +45,7 @@ namespace projekt_CSharp
                 WypelnijPola();
             }
         }
+        // Wydarzenie ładowania formularza
         private void WypelnijPola()
         {
             txtNazwaKursu.Text = KursDoEdycji.Nazwa;
@@ -57,13 +64,38 @@ namespace projekt_CSharp
             txtProwadzacy.Text = KursDoEdycji.Prowadzacy;
             numCena.Value = KursDoEdycji.Cena;
         }
-        private void numMaxUczestnikow_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
-
+        // Obsługuje kliknięcie przycisku "Zapisz". Waliduje dane i zapisuje je do bazy danych.
         private void btnZapiszKurs_Click(object sender, EventArgs e)
         {
+
+            // Walidacja pól
+            if (string.IsNullOrWhiteSpace(txtNazwaKursu.Text))
+            {
+                MessageBox.Show("Nazwa kursu jest wymagana.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(txtProwadzacy.Text))
+            {
+                MessageBox.Show("Nazwa prowadzącego jest wymagana.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (numMaxUczestnikow.Value < 1)
+            {
+                MessageBox.Show("Liczba uczestników musi być większa od zera.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (numCena.Value < 0)
+            {
+                MessageBox.Show("Cena nie może być ujemna.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            if (_isNewKurs && dtpDataRozpoczecia.Value.Date < DateTime.Now.Date)
+            {
+                MessageBox.Show("Nie można utworzyć kursu z datą rozpoczęcia w przeszłości.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            // Przypisanie wartości do obiektu KursDoEdycji
             KursDoEdycji.Nazwa = txtNazwaKursu.Text.Trim();
             KursDoEdycji.Opis = txtOpisKursu.Text.Trim();
             KursDoEdycji.DataRozpoczecia = dtpDataRozpoczecia.Value.ToUniversalTime();
@@ -100,7 +132,7 @@ namespace projekt_CSharp
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
-            catch (DbUpdateException dbEx) 
+            catch (DbUpdateException dbEx)
             {
                 MessageBox.Show($"Błąd podczas zapisywania danych: {dbEx.InnerException?.Message ?? dbEx.Message}", "Błąd Zapisu", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
