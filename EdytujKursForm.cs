@@ -108,14 +108,18 @@ namespace projekt_CSharp
             var validationContext = new ValidationContext(KursDoEdycji, null, null);
             var validationResults = new List<ValidationResult>();
             bool isValid = Validator.TryValidateObject(KursDoEdycji, validationContext, validationResults, true);
-
+            bool kursExists = _isNewKurs ? _context.Kursy.Any(k => k.Nazwa == KursDoEdycji.Nazwa): _context.Kursy.Any(k => k.Nazwa == KursDoEdycji.Nazwa && k.Id != KursDoEdycji.Id);
             if (!isValid)
             {
                 string errorMessages = string.Join("\n", validationResults.Select(r => r.ErrorMessage));
                 MessageBox.Show("Popraw następujące błędy:\n" + errorMessages, "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-
+            if (kursExists)
+            {
+                MessageBox.Show("Kurs o podanej nazwie już istnieje.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
             if (KursDoEdycji.DataZakonczenia.HasValue && KursDoEdycji.DataZakonczenia.Value < KursDoEdycji.DataRozpoczecia)
             {
                 MessageBox.Show("Data zakończenia nie może być wcześniejsza niż data rozpoczęcia.", "Błąd Walidacji", MessageBoxButtons.OK, MessageBoxIcon.Error);
