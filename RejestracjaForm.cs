@@ -83,6 +83,12 @@ namespace projekt_CSharp
             {
                 cmbKursy.SelectedIndex = 0;
             }
+            // podpowiedzi przy zapisywaniu uzytkownika na kurs
+            var autoComplete = new AutoCompleteStringCollection();
+            autoComplete.AddRange(kursy.Select(k => k.Nazwa).ToArray());
+            cmbKursy.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+            cmbKursy.AutoCompleteSource = AutoCompleteSource.CustomSource;
+            cmbKursy.AutoCompleteCustomSource = autoComplete;
         }
         // Wypełnia listę rozwijaną uczestnikami, którzy NIE są jeszcze zapisani na aktualnie wybrany kurs.
         private void WypelnijDostepnychUczestnikow()
